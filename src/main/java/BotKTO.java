@@ -52,8 +52,6 @@ public class BotKTO implements IListener<MessageReceivedEvent> {
         inputMsgStr = inputMsgStr.toLowerCase();
 
         try {
-
-
                 /* БОТ-ПРИКОЛИСТ */
             if (inputMsgStr.contains("повтори")) {
                 channel.sendMessage(inputMsgStr.replaceFirst("повтори", ""));
@@ -63,9 +61,7 @@ public class BotKTO implements IListener<MessageReceivedEvent> {
                 channel.sendMessage("Внимание! Школьник детектед — " + author + "!");
                 message.addReaction("👎");
             }
-            if (inputMsgStr.contains("паладины") || inputMsgStr.contains("paladins")) {
-                channel.sendMessage(":paladins_logo:");
-            }
+
             if (inputMsgStr.contains("привет") || inputMsgStr.contains("здравствуй")) {
                 message.addReaction("👋");
             }
@@ -152,7 +148,7 @@ public class BotKTO implements IListener<MessageReceivedEvent> {
     }
 
     public static void main(String[] args) {
-        // создаем ботаaaaa
+        // создаем бота
         BotKTO echoDiscordBot = new BotKTO();
 
         try {
