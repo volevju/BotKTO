@@ -5,7 +5,6 @@ import sx.blah.discord.api.events.IListener;
 import sx.blah.discord.handle.impl.events.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.DiscordException;
-import sx.blah.discord.util.MessageBuilder;
 import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.RateLimitException;
 
@@ -52,11 +51,37 @@ public class BotKTO implements IListener<MessageReceivedEvent> {
         inputMsgStr = inputMsgStr.toLowerCase();
 
         try {
+            if (inputMsgStr.startsWith("=")) {
+                String value = inputMsgStr.replaceFirst("=", "");
+//                int number1 = Integer.parseInt(value);
+                int number1 = 0;
+                int number2 = 0;
+                for (String retval : value.split("-")) {
+                    if (number1 == 0) {
+                        number1 = Integer.parseInt(retval);
+                    } else {
+                        number2 = Integer.parseInt(retval);
+                    }
+                }
+
+                if (number2 != 0) {
+                    int result = number1 - number2;
+                    channel.sendMessage("Ответ равен: " + Integer.toString(result));
+
+                    System.out.println("Калькулятор готов. Value = " + value);
+                }
+            }
+
                 /* БОТ-ПРИКОЛИСТ */
             if (inputMsgStr.contains("повтори")) {
                 channel.sendMessage(inputMsgStr.replaceFirst("повтори", ""));
+                System.out.println("Повторение произошло успешно. Автор был: " + author.getName());
             }
-            if (inputMsgStr.equals("лол") || inputMsgStr.contains(" лол") || inputMsgStr.contains("лол ") || inputMsgStr.contains("lol")) {
+            if (inputMsgStr.equals("лол")
+                    || inputMsgStr.contains(" лол")
+                    || inputMsgStr.contains("лол ")
+                    || inputMsgStr.contains("кек")
+                    || inputMsgStr.contains("lol")) {
                 message.addReaction("🎒");
                 channel.sendMessage("Внимание! Школьник детектед — " + author + "!");
                 message.addReaction("👎");
@@ -135,6 +160,9 @@ public class BotKTO implements IListener<MessageReceivedEvent> {
                 channel.sendMessage(author + ", правильно: **л__а__гает**, " + insultsWordList.get(caseNum));
             }
 
+            // Бот-Калькулятор
+
+
         } catch (RateLimitException e) {
             System.err.println("Ошибка при отправке сообщения: " + e.getMessage());
             e.printStackTrace();
@@ -160,3 +188,60 @@ public class BotKTO implements IListener<MessageReceivedEvent> {
         }
     }
 }
+
+//public class calculator {
+//
+//    public static void main (String[] args){
+//
+//        String s = args[0];
+//        char [] ch = s.toCharArray();
+//        String str1 = "";
+//        String str2 = "";
+//        String operator = "";
+//        char charTmp = ' ';
+//        int count = 0;
+//        int countFirsDigit = 0;
+//        int countSecondDigit= 0;
+//        double x = 0;
+//        double y = 0;
+//
+//        while (count < ch.length - 1){
+//            char c = ch[countFirsDigit];
+//
+//            if(Character.isDigit(c)){//проверка является ли символ числом
+//                String strTmp = Character.toString(c);//преобразование char в String
+//                str1 = str1.concat(strTmp);//склеивание последовательности символов
+//                x = Double.parseDouble(str1);//преобразование строки чисел в double
+//                countFirsDigit++;//счетчик первого числа
+//                count++;//общий счетчик
+//                countSecondDigit++;//счетчик второго числа
+//
+//            } else {
+//                countSecondDigit++;
+//                count = countSecondDigit;
+//
+//                charTmp = c;//определяем оператор
+//                operator = Character.toString(charTmp);
+//
+//                char c2 = ch[countSecondDigit];
+//
+//                if(Character.isDigit(c2)){
+//                    String strTmp = Character.toString(c2);
+//                    str2 = str2.concat(strTmp);
+//                    y = Double.parseDouble(str2);
+//                }
+//            }
+//        }
+//        if (operator.equals("*")){
+//            System.out.println("= " + (x * y));
+//        }
+//        if (operator.equals("/")){
+//            System.out.println("= " + (x / y));
+//        }
+//        if (operator.equals("+")){
+//            System.out.println("= " + (x + y));
+//        }
+//        if (operator.equals("-")){
+//            System.out.println("= " + (x - y));
+//        }
+//    }
