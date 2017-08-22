@@ -1,6 +1,7 @@
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventDispatcher;
+import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.api.events.IListener;
 import sx.blah.discord.handle.impl.events.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.*;
@@ -10,9 +11,10 @@ import sx.blah.discord.util.RateLimitException;
 
 import java.util.ArrayList;
 
-public class BotKTO implements IListener<MessageReceivedEvent> {
+public class BotKTO { // Здесь не нужен implements
 
     public static final String ECHO_BOT_TOKEN = "MzQ4NTUyNzgzNDgzNTAyNjAy.DHommQ.FlTi97cFCSG1iOkno7DH-O21afA";
+    Calculator calculator = new Calculator();
 
     private IDiscordClient discordClient;
     private boolean isConnected;
@@ -42,6 +44,7 @@ public class BotKTO implements IListener<MessageReceivedEvent> {
         this.isConnected = true;
     }
 
+    @EventSubscriber // Оказывается есть такая штука
     public void handle(MessageReceivedEvent event) {
 
         IMessage message = event.getMessage();
@@ -50,27 +53,11 @@ public class BotKTO implements IListener<MessageReceivedEvent> {
         IUser author = message.getAuthor();
         inputMsgStr = inputMsgStr.toLowerCase();
 
+        if(inputMsgStr.startsWith("=")) { // Если пользователь хочет произвести вычисления, то вызвать метод
+            calculator.calculate(message);
+        }
+
         try {
-            if (inputMsgStr.startsWith("=")) {
-                String value = inputMsgStr.replaceFirst("=", "");
-//                int number1 = Integer.parseInt(value);
-                int number1 = 0;
-                int number2 = 0;
-                for (String retval : value.split("-")) {
-                    if (number1 == 0) {
-                        number1 = Integer.parseInt(retval);
-                    } else {
-                        number2 = Integer.parseInt(retval);
-                    }
-                }
-
-                if (number2 != 0) {
-                    int result = number1 - number2;
-                    channel.sendMessage("Ответ равен: " + Integer.toString(result));
-
-                    System.out.println("Калькулятор готов. Value = " + value);
-                }
-            }
 
                 /* БОТ-ПРИКОЛИСТ */
             if (inputMsgStr.contains("повтори")) {
@@ -159,9 +146,6 @@ public class BotKTO implements IListener<MessageReceivedEvent> {
             if (inputMsgStr.contains("логает")) {
                 channel.sendMessage(author + ", правильно: **л__а__гает**, " + insultsWordList.get(caseNum));
             }
-
-            // Бот-Калькулятор
-
 
         } catch (RateLimitException e) {
             System.err.println("Ошибка при отправке сообщения: " + e.getMessage());
